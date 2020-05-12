@@ -248,13 +248,50 @@ const Mutation = new GraphQLObjectType({
                 return employer.save();
             }
         },
+        addJob: {
+            type: JobType,
+            args: {
+                companyName: { type: GraphQLString },
+                title: { type: GraphQLString },
+                postingDate: { type: GraphQLString },
+                deadline: { type: GraphQLString },
+                location: { type: GraphQLString },
+                salary: { type: GraphQLString },
+                jobDescription: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                const job = new Job(args);
+                return job.save();
+            }
+        },
+        applyJob: {
+            type: JobType,
+            args: {
+                id: { type: GraphQLID },
+                studentId: { type: GraphQLID },
+                name: { type: GraphQLString },
+                university: { type: GraphQLString },
+                cgpa: { type: GraphQLString }
+            },
+            resolve: async (parent, args) => {
+                const job = await Job.findById({_id: args.id});
+                job.students.push({studentId: args.studentId, name: args.name, university: args.university, cgpa: args.cgpa});
+                await job.save();
+                const {companyName, title, location, salary, jobDescription, category} = job
+                const student = await Student.findById({_id: args.studentId});
+                const applicationId = job.students[job.students.length-1];
+                const status = "Pending";
+                student.applications.push({applicationId, status, companyName, title, location, salary, jobDescription, category});
+                return student.save()
+            }   
+        },
         updateEmployer: {
             type: EmployerType,
             args: {
-                id: {},
-                name: {},
-                location: {},
-                description: {}
+                id: { type: GraphQLID },
+                name: { type: GraphQLString },
+                location: { type: GraphQLString },
+                description: { type: GraphQLString }
             },
             resolve: async (parent, args) => {
                 const employer = await Employer.findById({_id: args.id});
