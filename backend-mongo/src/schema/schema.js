@@ -257,10 +257,10 @@ const Mutation = new GraphQLObjectType({
                     if(experience._id == args.id) {
                         experience.company =  args.company;
                         experience.location =  args.location,
-                        education.jobTitle = args.jobTitle,
-                        education.description = args.description,
-                        education.startDtae = args.startDtae,
-                        education.endDtate = args.endDtate
+                        experience.jobTitle = args.jobTitle,
+                        experience.description = args.description,
+                        experience.startDtae = args.startDtae,
+                        experience.endDtate = args.endDtate
                     }
                 })
                 //console.log(student);
