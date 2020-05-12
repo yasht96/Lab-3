@@ -14,9 +14,8 @@ const EmployerSchema = new Schema({
         type: String,
         required: true
     },
-    location: String,
-    description: String,
-    contactNumber: Number,
+    location: {type: String, default: ""},
+    description: {type: String, default: ""}, 
 
 })
 

@@ -190,6 +190,25 @@ const RootQuery = new GraphQLObjectType({
 
             }
         },
+        employerLogin: {
+            type: EmployerType,
+            args: {
+                email: { type: GraphQLString },
+                password: { type: GraphQLString }
+            },
+            resolve: async (parent, args) => {
+                const employer = await Employer.findOne({email: args.email});
+                console.log(employer);
+                if(employer !== null) {
+                    if(args.password == employer.password) {
+                        return employer;
+                    }else{
+                        return {error: "Incorrect Credentials"};
+                    }
+                }
+                return {error: "Incorrect Credentials"};
+            }
+        }
     }
 });
 
@@ -214,6 +233,19 @@ const Mutation = new GraphQLObjectType({
             //console.log(args);
               const student = new Student(args);
               return student.save()
+            }
+        },
+        addEmployer: {
+            type: EmployerType,
+            args: {
+                name: { type: GraphQLString },
+                email: { type: GraphQLString },
+                password: { type: GraphQLString },
+                location: { type: GraphQLString },
+            },
+            resolve(parent, args) {
+                const employer = new Employer(args);
+                return employer.save();
             }
         },
         updateStudentBasicDetails: {
