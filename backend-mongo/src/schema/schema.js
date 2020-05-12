@@ -248,6 +248,22 @@ const Mutation = new GraphQLObjectType({
                 return employer.save();
             }
         },
+        updateEmployer: {
+            type: EmployerType,
+            args: {
+                id: {},
+                name: {},
+                location: {},
+                description: {}
+            },
+            resolve: async (parent, args) => {
+                const employer = await Employer.findById({_id: args.id});
+                employer.name = args.name;
+                employer.location = args.location;
+                employer.description = args.description;
+                return employer.save();
+            }
+        },
         updateStudentBasicDetails: {
             type: StudentType,
             args: {
@@ -269,9 +285,6 @@ const Mutation = new GraphQLObjectType({
                 return student.save();
             }
         },
-        // addEducation: {
-
-        // },
         updateEducation: {
             type: StudentType,
             args: {
