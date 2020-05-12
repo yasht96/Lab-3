@@ -169,7 +169,27 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 return Job.find({companyName: args.name})
             }
-        }
+        },
+        studentLogin: {
+            type: StudentType,
+            args: {
+                email: { type: GraphQLString },
+                password: { type: GraphQLString } 
+            },
+            resolve: async (parent, args) => {
+                const student = await Student.findOne({email: args.email});
+                console.log(student);
+                if(student !== null) {
+                    if(args.password == student.password) {
+                        return student;
+                    }else{
+                        return {error: "Incorrect Credentials"};
+                    }
+                }
+                return {error: "Incorrect Credentials"};
+
+            }
+        },
     }
 });
 
