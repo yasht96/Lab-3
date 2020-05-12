@@ -156,6 +156,13 @@ const RootQuery = new GraphQLObjectType({
                 return Job.findOne({_id: args.id})
             }
         },
+        jobSearch: {
+            type: new GraphQLList(JobType), 
+            args: { name: { type: GraphQLString }},
+            resolve(parent, args) {
+                return Job.find({companyName: args.name});
+            }
+        },
         companyJobs: {
             type: new GraphQLList(JobType), 
             args: { name: { type: GraphQLString }},
@@ -210,6 +217,9 @@ const Mutation = new GraphQLObjectType({
                 return student.save();
             }
         },
+        // addEducation: {
+
+        // },
         updateEducation: {
             type: StudentType,
             args: {
