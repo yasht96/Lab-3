@@ -15,15 +15,30 @@ const StudentSchema = new Schema({
         type: String, 
         required: true
     },
-    major: String,
-    collegeName: String,
-    contactNumber: Number,
-    dateOfBirth: Date,
-    city: String,
-    state: String,
-    country: String,
-    careerObjective: String,
-    skillSet: [],
+    collegeName: {
+        type: String,
+        required: true
+    },
+    dateOfBirth: {
+        type: String,
+        default: ""
+    },
+    city: {
+        type: String,
+        default: ""
+    },
+    state: {
+        type: String,
+        default: ""
+    },
+    country: {
+        type: String,
+        default: ""
+    },
+    careerObjective: {
+        type: String,
+        default: ""
+    },
     education: [{
         university: String,
         location: String,
@@ -50,17 +65,6 @@ const StudentSchema = new Schema({
         jobDescription: String,
         category: String
 
-    }],
-    registeredEvents: [{
-        registeredEventId: Schema.Types.ObjectId,
-        eventId: Schema.Types.ObjectId,
-        companyName: String,
-        eventName: String,
-        eventDescription: String,
-        eventLocation: String,
-        eligibility: String,
-        fromDate: Date,
-        toDate: Date,
     }]
 })
 

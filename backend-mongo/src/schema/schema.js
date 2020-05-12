@@ -60,7 +60,6 @@ const StudentApplication = new GraphQLObjectType({
         studentId: { type: GraphQLID },
         name: { type: GraphQLString },
         university: { type: GraphQLString },
-        major: { type: GraphQLString },
         cgpa: { type: GraphQLString }
     })
 })
@@ -102,15 +101,12 @@ const StudentType = new GraphQLObjectType({
         name: { type: GraphQLString },
         email: { type: GraphQLString },
         password: { type: GraphQLString },
-        major: { type: GraphQLString },
         collegeName: { type: GraphQLString },
-        contactNumber: { type: GraphQLInt },
         dateOfBirth: { type: GraphQLString },
         city: { type: GraphQLString },
         state: { type: GraphQLString },
         country: { type: GraphQLString },
         careerObjective: { type: GraphQLString },
-        skillSet: { type: new GraphQLList(GraphQLString) },
         education: { type: new GraphQLList(EducationType) },
         experience: { type: new GraphQLList(ExperienceType) },
         applications: { type: new GraphQLList(ApplicationsType) }
@@ -170,48 +166,108 @@ const RootQuery = new GraphQLObjectType({
     }
 });
 
+
+
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
         addStudent: {
             type: StudentType,
-            args: {
+            args: { 
                 name: { type: GraphQLString },
-                email: { type: GraphQLInt },
-                password: { type: GraphQLID },
-
+                email: { type: GraphQLString },
+                password: { type: GraphQLString },
+                collegeName: { type: GraphQLString },
+                dateOfBirth: { type: GraphQLString },
+                city: { type: GraphQLString },
+                state: { type: GraphQLString },
+                country: { type: GraphQLString }
             },
             resolve(parent, args) {
-                let author = {
-                    name: args.name,
-                    age: args.age,
-                    id: args.id
-                };
-                authors.push(author)
-                console.log("Authors", authors);
-                return author;
+            //console.log(args);
+              const student = new Student(args);
+              return student.save()
             }
         },
-
-        addBook: {
-            type: BookType,
+        updateStudentBasicDetails: {
+            type: StudentType,
             args: {
+                id: { type: GraphQLID },
                 name: { type: GraphQLString },
-                genre: { type: GraphQLString },
-                authorId: { type: GraphQLID },
+                dateOfBirth: { type: GraphQLString },
+                city: { type: GraphQLString },
+                state: { type: GraphQLString },
+                country: { type: GraphQLString }
             },
-            resolve(parent, args) {
-                let book = {
-                    name: args.name,
-                    genre: args.genre,
-                    authorId: args.authorId,
-                    id: books.length+1
-                }
-                books.push(book);
-                return book;
+            resolve: async (parent, args) => {
+
+                const student = await Student.findById({_id: args.id});
+                student.name = args.name;
+                student.dateOfBirth = args.dateOfBirth;
+                student.city = args.city;
+                student.state = args.state;
+                student.country = args.country;
+                return student.save();
+            }
+        },
+        updateEducation: {
+            type: StudentType,
+            args: {
+                studentId: { type: GraphQLID },
+                id: { type: GraphQLID },
+                university: { type: GraphQLString },
+                location: { type: GraphQLString },
+                degree: { type: GraphQLString },
+                major: { type: GraphQLString },
+                yearOfPassing: { type: GraphQLString },
+                cgpa: { type: GraphQLString }, 
+            },
+            resolve: async (parent, args) => {
+
+                const student = await Student.findOne({_id: args.studentId});
+                student.education.map((education) => {
+                    if(education._id == args.id) {
+                        education.university =  args.university;
+                        education.location =  args.location,
+                        education.degree = args.degree,
+                        education.major = args.major,
+                        education.yearOfPassing = args.yearOfPassing,
+                        education.cgpa = args.cgpa
+                    }
+                })
+                //console.log(student);
+                return student.save();
+            }
+        },
+        updateExperience: {
+            type: StudentType,
+            args: {
+                studentId: { type: GraphQLID },
+                id: { type: GraphQLID },
+                company: { type: GraphQLString },
+                jobTitle: { type: GraphQLString },
+                location: { type: GraphQLString },
+                description: { type: GraphQLString },
+                startDtae: { type: GraphQLString },
+                endDtate: { type: GraphQLString }
+            },
+            resolve: async (parent, args) => {
+                const student = await Student.findOne({_id: args.studentId});
+                student.experience.map((experience) => {
+                    if(experience._id == args.id) {
+                        experience.company =  args.company;
+                        experience.location =  args.location,
+                        education.jobTitle = args.jobTitle,
+                        education.description = args.description,
+                        education.startDtae = args.startDtae,
+                        education.endDtate = args.endDtate
+                    }
+                })
+                //console.log(student);
+                return student.save();
             }
         }
-
+        
     }
 });
 
