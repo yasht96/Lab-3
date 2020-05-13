@@ -2,9 +2,27 @@ import React from 'react';
 import Header from './Header';
 import ApplicationItem from './ApplicationItem';
 import ApplicationSideList from './ApplicationSideList';
-import Pagination from './Pagination';
-import { connect } from 'react-redux';
-import { fetchStudentProfile } from '../actions';
+import {gql} from 'apollo-boost'
+import {graphql} from 'react-apollo'
+
+
+const getStudent = gql`
+  {
+    student(id:"5e996d140c49d423b10b0e68"){
+      _id
+      name
+      applications{
+        applicationId
+        category
+        companyName
+        location
+        status
+        title
+        jobDescription
+      }
+    }
+  }
+`
 
 class Application extends React.Component {
   constructor() {
@@ -14,15 +32,12 @@ class Application extends React.Component {
 
   componentDidMount() {
     const studentId = '5e996d140c49d423b10b0e68';
-    this.props.fetchStudentProfile(studentId);
   }
 
-  paginate = number => this.setState({currentPageNumber: number});
+ 
 
   render() {
-    const indexOfLastPost = this.state.currentPageNumber*5;
-    const indexOfFirstPost = indexOfLastPost - 5;
-    const currentPosts = this.props.filters.slice(indexOfFirstPost, indexOfLastPost);
+  console.log(this.props.data)
     return (
       <div>
         <div>
@@ -33,15 +48,14 @@ class Application extends React.Component {
             <ApplicationSideList />
           </div>
           <div style={{float: 'left', marginLeft: '10px', width: '70%', marginTop: '20px'}}>
-            {currentPosts.map(application => {
-              return (
-                <div className='ui raised segment' style={{ width: '75%' }}>
-                  <ApplicationItem key={application._id} application={application} />
-                </div>
-              );
-            })}
+              {this.props.data.student && this.props.data.student.applications.map(application => {
+                return (
+                  <div className='ui raised segment' style={{ width: '75%' }}>
+                    <ApplicationItem key={application._id} application={application} />
+                  </div>
+                );
+              })}
             <div>
-            <Pagination postsPerPage={5} totalPosts={this.props.filters.length} paginate={this.paginate}/>
             </div>
           </div>
         </div>
@@ -50,15 +64,6 @@ class Application extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  if(state.applicationsFilteredList) {
-    return {
-      filters: state.applicationsFilteredList
-    }
-  }
-  return {
-    filters: []
-  }
-}
 
-export default connect(mapStateToProps, { fetchStudentProfile })(Application);
+
+export default graphql(getStudent)(Application);

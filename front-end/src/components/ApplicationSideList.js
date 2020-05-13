@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { filterApplications } from '../actions';
+
 
 class ApplicationSideList extends React.Component {
   state = {status: ''}
@@ -57,13 +56,6 @@ class ApplicationSideList extends React.Component {
   
 };
 
-const mapStateToProps = (state) => {
-  if(!state.profile.applications) {
-    return {applications: []}
-  }
-  return {
-    applications: state.profile.applications
-  }
-}
 
-export default connect(mapStateToProps, { filterApplications })(ApplicationSideList);
+
+export default ApplicationSideList;
