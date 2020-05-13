@@ -119,34 +119,35 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         employers: {
             type: new GraphQLList(EmployerType),
-            resolve(parent, args) {
-                return Employer.find({});
+            resolve: async (parent, args) => {
+                return await Employer.find({});
             }
         },
         students: {
             type: new GraphQLList(StudentType),
-            resolve(parent, args) {
-                return Student.find({});
+            resolve: async (parent, args) => {
+                console.log("hi");
+                return await Student.find({});
             }
         },
         jobs: {
             type: new GraphQLList(JobType),
-            resolve(parent, args) {
-                return Job.find({});        
+            resolve: async (parent, args) => {
+                return await Job.find({});        
             }
         },
         employer: {
             type: EmployerType,
             args: { id: {type: GraphQLID }},
-            resolve(parent, args) {
-                return Employer.findOne({_id: args.id})
+            resolve: async (parent, args) => {
+                return await Employer.findOne({_id: args.id})
             }
         },
         student: {
             type: StudentType, 
             args: { id: {type: GraphQLID }},
-            resolve(parent, args) {
-                return Student.findOne({_id: args.id})
+            resolve: async (parent, args) => {
+                return await Student.findOne({_id: args.id})
             }
         },
         job: {
@@ -257,7 +258,8 @@ const Mutation = new GraphQLObjectType({
                 deadline: { type: GraphQLString },
                 location: { type: GraphQLString },
                 salary: { type: GraphQLString },
-                jobDescription: { type: GraphQLString }
+                jobDescription: { type: GraphQLString },
+                category: { type: GraphQLString }
             },
             resolve(parent, args) {
                 const job = new Job(args);
@@ -265,7 +267,7 @@ const Mutation = new GraphQLObjectType({
             }
         },
         applyJob: {
-            type: JobType,
+            type: StudentType,
             args: {
                 id: { type: GraphQLID },
                 studentId: { type: GraphQLID },

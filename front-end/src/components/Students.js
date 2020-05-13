@@ -2,9 +2,19 @@ import React from 'react';
 import Header from './Header';
 import StudentSideList from './StudentSideList';
 import StudentItem from './StudentItem';
-import Pagination from './Pagination';
-import { connect } from 'react-redux';
-import { fetchStudents } from '../actions';
+import {gql} from 'apollo-boost'
+import {graphql} from 'react-apollo'
+
+const getStudentsQuery = gql`
+{
+  students{
+    _id
+    name
+    city
+    collegeName
+  }
+}
+`
 
 class Students extends React.Component {
   constructor() {
@@ -20,19 +30,19 @@ class Students extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchStudents();
+
   }
 
   onSkillSearch = list => {
     this.setState({ searchStudent: list });
   };
 
-  paginate = number => this.setState({currentPageNumber: number});
+  books = () => {
+    
+  }
 
   render() {
-    const indexOfLastPost = this.state.currentPageNumber*5;
-    const indexOfFirstPost = indexOfLastPost - 5;
-    const currentPosts = this.props.filters.slice(indexOfFirstPost, indexOfLastPost);
+    console.log(this.props.data.students)
     return (
       <div>
         <Header />
@@ -47,7 +57,7 @@ class Students extends React.Component {
           </div>
           <div style={{ float: 'left', marginLeft: '15px', width: '65%' }}>
             <div>
-              {currentPosts.map(student => {
+              {this.props.data.students && this.props.data.students.map(student => {
                 return (
                   <div className='ui raised segment' style={{ height: '110px', marginBottom: '20px' }}>
                     <StudentItem key={student._id} student={student} />
@@ -55,7 +65,6 @@ class Students extends React.Component {
                 );
               })}
             </div>
-            <Pagination postsPerPage={5} totalPosts={this.props.filters.length} paginate={this.paginate}/>
           </div>
         </div>
       </div>
@@ -63,11 +72,6 @@ class Students extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    students: state.students,
-    filters: state.studentsFilteredList
-  }
-}
 
-export default connect(mapStateToProps, { fetchStudents })(Students);
+
+export default graphql(getStudentsQuery)(Students)

@@ -1,8 +1,6 @@
 import React from 'react';
 import alt from '../images/alt.png';
-import { Redirect } from 'react-router';
-import { connect } from 'react-redux';
-import { createChats } from '../actions';
+
 
 class StudentItem extends React.Component {
   constructor(props) {
@@ -14,55 +12,6 @@ class StudentItem extends React.Component {
 
   }
 
-  onClickHandler = () => {
-    console.log(this.props.student.student_id);
-    this.setState({
-      redirect: (
-        <Redirect
-          to={{
-            pathname: '/student/profile',
-            state: { student: this.props.student }
-          }}
-        />
-      )
-    });
-  };
-
-  onMessage = () => {
-    const name = 'Yash T'
-    const studentId = '5e87e56a9bc9ba4b027cb3d6'
-    const reqObj = {
-      messages: [
-        {
-          text: "Hi",
-          sender: name
-        }
-      ],
-      users: [
-        {
-          name: name,
-          userId: "5e87e56a9bc9ba4b027cb3d6"
-          
-        },
-        {
-          name: this.props.student.name,
-          userId: this.props.student._id
-        }
-      
-      ]
-    }
-    this.props.createChats(reqObj)
-    this.setState({redirect: (
-      <Redirect
-        to={{
-          pathname: '/message',
-          state: { student: this.props.student }
-        }}
-      />
-    )
-
-    })
-  }
 
   render() {
     return (
@@ -89,10 +38,10 @@ class StudentItem extends React.Component {
             </span>
           </div>
           <div className='description'>
-            <div>
+            {/* <div>
               <i className='graduation cap icon' />
               {this.props.student.major}
-            </div>
+            </div> */}
           </div>
           <div className='extra'></div>
         </div>
@@ -101,4 +50,4 @@ class StudentItem extends React.Component {
   }
 }
 
-export default connect(null, { createChats })(StudentItem);
+export default StudentItem;

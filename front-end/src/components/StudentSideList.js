@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { filterStudents } from '../actions'; 
+
 
 class StudentSideList extends React.Component {
   constructor() {
@@ -102,11 +101,6 @@ class StudentSideList extends React.Component {
   
 };
 
-const mapStateToProps = (state) => {
-  return {
-    students: state.students,
-    filters: state.studentsFilteredList
-  }
-}
 
-export default connect(mapStateToProps, { filterStudents })(StudentSideList);
+
+export default StudentSideList;
