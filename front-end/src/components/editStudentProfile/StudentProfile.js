@@ -7,8 +7,9 @@ import AddForm from './AddForm';
 import Skills from './Skills';
 import AddExperienceForm from './AddExperienceForm';
 import { Form, TextArea } from 'semantic-ui-react';
-import { connect } from 'react-redux';
-import { fetchStudentProfile, updateStudentProfile } from '../../actions';
+import {graphql} from 'react-apollo'
+import { getStudentProfile } from '../../queries/queries';
+
 
 class StudentProfile extends React.Component {
   constructor() {
@@ -202,10 +203,5 @@ class StudentProfile extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    profile: state.profile
-  }
-}
 
-export default connect(mapStateToProps, {fetchStudentProfile, updateStudentProfile})(StudentProfile);
+export default graphql(getStudentProfile)(StudentProfile);

@@ -2,19 +2,10 @@ import React from 'react';
 import Header from './Header';
 import StudentSideList from './StudentSideList';
 import StudentItem from './StudentItem';
-import {gql} from 'apollo-boost'
+import {getStudentsQuery} from '../queries/queries';
 import {graphql} from 'react-apollo'
 
-const getStudentsQuery = gql`
-{
-  students{
-    _id
-    name
-    city
-    collegeName
-  }
-}
-`
+
 
 class Students extends React.Component {
   constructor() {

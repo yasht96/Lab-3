@@ -2,27 +2,9 @@ import React from 'react';
 import Header from './Header';
 import ApplicationItem from './ApplicationItem';
 import ApplicationSideList from './ApplicationSideList';
-import {gql} from 'apollo-boost'
+import {getStudent} from '../queries/queries';
 import {graphql} from 'react-apollo'
 
-
-const getStudent = gql`
-  {
-    student(id:"5e996d140c49d423b10b0e68"){
-      _id
-      name
-      applications{
-        applicationId
-        category
-        companyName
-        location
-        status
-        title
-        jobDescription
-      }
-    }
-  }
-`
 
 class Application extends React.Component {
   constructor() {
